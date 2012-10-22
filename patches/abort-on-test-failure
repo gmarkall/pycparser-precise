@@ -1,0 +1,16 @@
+Description: Return a non-zero exit code if tests fail
+Author: Stefano Rivera <stefanor@debian.org>
+Forwarded: https://code.google.com/p/pycparser/issues/detail?id=69
+
+--- a/tests/all_tests.py
++++ b/tests/all_tests.py
+@@ -14,5 +14,7 @@
+         'test_c_parser',
+     ]
+ )
+-    
+-unittest.TextTestRunner(verbosity=1).run(suite)
++
++r = unittest.TextTestRunner(verbosity=1).run(suite)
++if r.failures:
++    sys.exit(1)

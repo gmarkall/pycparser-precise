@@ -1,0 +1,5 @@
+pycparser (2.07+dfsg-1) unstable; urgency=low
+
+  * Initial release. (Closes: #581847)
+
+ -- Stefano Rivera <stefanor@debian.org>  Sun, 24 Jun 2012 19:20:01 +0200

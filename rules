@@ -1,0 +1,44 @@
+#!/usr/bin/make -f
+
+PYVERS = $(shell pyversions -r)
+PY3VERS = $(shell py3versions -r)
+
+%:
+	dh $@ --with python2,python3
+
+override_dh_auto_build:
+	cd pycparser && python _build_tables.py
+	set -e -x; \
+	for py in $(PYVERS) $(PY3VERS); do \
+		$$py setup.py build; \
+	done
+
+override_dh_auto_test:
+	set -e -x; \
+	for py in $(PYVERS) $(PY3VERS); do \
+		$$py tests/all_tests.py; \
+	done
+
+override_dh_auto_install:
+	set -e -x; \
+	for py in $(PYVERS); do \
+		$$py setup.py install --skip-build --root debian/python-pycparser --install-layout=deb; \
+	done
+	set -e -x; \
+	for py in $(PY3VERS); do \
+		$$py setup.py install --skip-build --root debian/python3-pycparser --install-layout=deb; \
+	done
+
+override_dh_auto_clean:
+	rm -rf build
+	find . -name '*.pyc' -delete
+
+get-packaged-orig-source:
+	set -e -x; \
+	VER=$(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^+]+).*,\1,p'); \
+	uscan --noconf --force-download --rename --download-version=$$VER --destdir=.; \
+	tar -x --exclude=utils/cpp.exe -f pycparser_$$VER.orig.tar.gz; \
+	rm -f pycparser_$$VER.orig.tar.gz; \
+	GZIP=--best tar -cz --owner root --group root --mode a+rX \
+		-f pycparser_$$VER+dfsg.orig.tar.gz pycparser-$$VER; \
+	rm -rf pycparser-$$VER
