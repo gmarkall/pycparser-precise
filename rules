@@ -4,7 +4,7 @@ PYVERS = $(shell pyversions -r)
 PY3VERS = $(shell py3versions -r)
 
 %:
-	dh $@ --with python2,python3
+	dh $@ --with python2,python3 --with quilt
 
 override_dh_auto_build:
 	cd pycparser && python _build_tables.py
