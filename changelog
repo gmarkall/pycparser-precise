@@ -1,5 +1,9 @@
-pycparser (2.07+dfsg-1) unstable; urgency=low
+pycparser (2.08) unstable; urgency=low
 
+  [ Stefano Rivera ]
   * Initial release. (Closes: #581847)
 
- -- Stefano Rivera <stefanor@debian.org>  Sun, 24 Jun 2012 19:20:01 +0200
+  [ Graham Markall ]
+  * Add switch-case patch and update to 2.08
+
+ -- graham <graham.markall08@imperial.ac.uk>  Mon, 22 Oct 2012 19:49:56 +0100

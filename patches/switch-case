@@ -1,0 +1,65 @@
+Description: Fix generation of case statements
+Author: Graham Markall <grm08@doc.ic.ac.uk>
+Forwarded: http://code.google.com/p/pycparser/issues/detail?id=79
+
+--- a/pycparser/c_generator.py
++++ b/pycparser/c_generator.py
+@@ -227,11 +227,15 @@
+     
+     def visit_Case(self, n):
+         s = 'case ' + self.visit(n.expr) + ':\n'
+-        s += self._generate_stmt(n.stmt, add_indent=True)
++        for stmt in n.stmts:
++            s += self._generate_stmt(stmt, add_indent=True)
+         return s
+     
+     def visit_Default(self, n):
+-        return 'default:\n' + self._generate_stmt(n.stmt, add_indent=True)
++        s = 'default:\n' 
++        for stmt in n.stmts:
++            s += self._generate_stmt(stmt, add_indent=True)
++        return s
+ 
+     def visit_Label(self, n):
+         return n.name + ':\n' + self._generate_stmt(n.stmt)
+--- a/tests/all_tests.py
++++ b/tests/all_tests.py
+@@ -12,6 +12,7 @@
+         'test_c_ast',
+         'test_general',
+         'test_c_parser',
++        'test_c_generator'
+     ]
+ )
+     
+--- a/tests/test_c_generator.py
++++ b/tests/test_c_generator.py
+@@ -105,7 +105,26 @@
+                 int data;
+             } node;
+             ''')
+-    
++
++    def test_switch_case(self):
++        self._assert_ctoc_correct(r'''
++            int main() {
++                switch (myvar) {
++                case 10:
++                {
++                    k = 10;
++                    p = k + 1;
++                    break;
++                }
++                case 20:
++                case 30:
++                    return 20;
++                default: 
++                    break;
++                }
++            }
++        ''')
++
+     def test_issue36(self):
+         self._assert_ctoc_correct(r'''
+             int main() {
+

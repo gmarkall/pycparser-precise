@@ -1,8 +1,7 @@
 Source: pycparser
 Section: python
 Priority: optional
-Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
-Uploaders: Stefano Rivera <stefanor@debian.org>
+Maintainer: Graham Markall <graham.markall08@imperial.ac.uk>
 Build-Depends:
  debhelper (>= 7.0.50~),
  python-all (>= 2.6.6-3~),
